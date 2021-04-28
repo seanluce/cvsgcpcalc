@@ -481,6 +481,20 @@
             }
         }
     </script>
+    <style>
+        .btn-outline-primary:not(:disabled):not(.disabled).active {
+            background-color: #4285F4;
+            border-color: #4285F4;
+        }
+        .slider-selection.tick-slider-selection {
+            background-image: none;
+            background-color: #F4B400;
+        }
+        .slider-handle,.slider-tick.in-selection {
+            background-image: none;
+            background-color: #F4B400;
+        }
+    </style>
 </head>
 
 
@@ -638,7 +652,7 @@
 
      
                         <div class="input-group-prepend">
-                            <span style="background-color: #ffa99f;" class="my-1 input-group-text">Discount</span>
+                            <span style="background-color: #0f9d58; color: white;" class="my-1 input-group-text">Discount</span>
                         </div>
                         <input oninput="getResults()" type="text" class="my-1 mr-sm-1 form-control" placeholder="" value="0" aria-label="Percent Discount" aria-describedby="Percent Discount" id="discountinput"></input>
                         <div class="input-group-append btn-group btn-group-toggle" data-toggle="buttons">
