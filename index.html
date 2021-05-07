@@ -40,6 +40,10 @@
             max_vol_capacity = 102400;
             min_tput = 16.0;
             discount_percent = 0;
+            tenmin_rate = 0.17;
+            hourly_rate = 0.15;
+            dailyplus_rate = 0.14;
+            replication_efficiency = 1;
 
             var max_tput64kseq = {
                 0: 0 + 1240,
@@ -90,7 +94,8 @@
             tput_target = document.getElementById("tputinput").value;
             iops_target = document.getElementById("iopsinput").value;
             discount_percent = (100 - document.getElementById("discountinput").value) / 100;
-            
+            change_rate = document.getElementById("changerate").value;
+
             //active_region = document.getElementById("regionselector").value
             swstandard_rate = swstandard_rate * discount_percent;
             swstandardredundant_rate = swstandardredundant_rate * discount_percent;
@@ -105,6 +110,31 @@
 
             if (document.getElementById('GiB').checked) {
                 volume_in_gb = cap_target * 1;
+            }
+
+            if (isNaN(change_rate) || change_rate <= 0 || change_rate > 100) {
+                document.getElementById("destinationvolume").classList.add("d-none");
+                document.getElementById("replicationcost").classList.add("d-none");
+                document.getElementById("crrwarning").classList.remove('text-muted');
+                document.getElementById("crrwarning").classList.add('text-danger');
+                if (change_rate == 0) {
+                document.getElementById("crrwarning").classList.remove('text-danger');
+                document.getElementById("crrwarning").classList.add('text-muted');
+                }
+            } else {
+                document.getElementById("destinationvolume").classList.remove("d-none");
+                document.getElementById("replicationcost").classList.remove("d-none");
+                document.getElementById("crrwarning").classList.remove('text-danger');
+                document.getElementById("crrwarning").classList.add('text-muted');
+                document.getElementById("init_10min_cell").innerText = (volume_in_gb * tenmin_rate * replication_efficiency).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("init_hourly_cell").innerText = (volume_in_gb * hourly_rate * replication_efficiency).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("init_daily_cell").innerText = (volume_in_gb * dailyplus_rate * replication_efficiency).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("inc_10min_cell").innerText = ((((volume_in_gb * (change_rate/100)) * tenmin_rate * replication_efficiency))*30).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("inc_hourly_cell").innerText = ((((volume_in_gb * (change_rate/100)) * hourly_rate * replication_efficiency))*30).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("inc_daily_cell").innerText = ((((volume_in_gb * (change_rate/100)) * dailyplus_rate * replication_efficiency))*30).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("month1_10min_cell").innerText = ((volume_in_gb * tenmin_rate * replication_efficiency) + ((((volume_in_gb * (change_rate/100)) * tenmin_rate * replication_efficiency))*30)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("month1_hourly_cell").innerText = ((volume_in_gb * hourly_rate * replication_efficiency) + ((((volume_in_gb * (change_rate/100)) * hourly_rate * replication_efficiency))*30)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                document.getElementById("month1_daily_cell").innerText = ((volume_in_gb * dailyplus_rate * replication_efficiency) +  ((((volume_in_gb * (change_rate/100)) * dailyplus_rate * replication_efficiency))*30)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
             }
 
             if (document.getElementById("64k_seq").checked) {
@@ -175,6 +205,10 @@
                 document.getElementById("size_premium_cell").innerText = "";
                 document.getElementById("size_extreme_cell").innerText = "";
 
+                document.getElementById("dest_size_standard_cell").innerText = "";
+                document.getElementById("dest_size_premium_cell").innerText = "";
+                document.getElementById("dest_size_extreme_cell").innerText = "";
+
                 document.getElementById("tput_swstandard_cell").innerText = "";
                 document.getElementById("tput_swstandardredundant_cell").innerText = "";
                 document.getElementById("tput_standard_cell").innerText = "";
@@ -192,6 +226,10 @@
                 document.getElementById("cost_standard_cell").innerText = "";
                 document.getElementById("cost_premium_cell").innerText = "";
                 document.getElementById("cost_extreme_cell").innerText = "";
+
+                document.getElementById("dest_cost_standard_cell").innerText = "";
+                document.getElementById("dest_cost_premium_cell").innerText = "";
+                document.getElementById("dest_cost_extreme_cell").innerText = "";
                 } else {
                     document.getElementById("capinput").style.borderColor = "lightgray";
                     document.getElementById("volumewarning").classList.add('text-muted');
@@ -206,6 +244,10 @@
                         document.getElementById("size_standard_cell").innerText = "";
                         document.getElementById("size_premium_cell").innerText = "";
                         document.getElementById("size_extreme_cell").innerText = "";
+
+                        document.getElementById("dest_size_standard_cell").innerText = "";
+                        document.getElementById("dest_size_premium_cell").innerText = "";
+                        document.getElementById("dest_size_extreme_cell").innerText = "";
 
                         document.getElementById("tput_swstandard_cell").innerText = "";
                         document.getElementById("tput_swstandardredundant_cell").innerText = "";
@@ -224,6 +266,10 @@
                         document.getElementById("cost_standard_cell").innerText = "";
                         document.getElementById("cost_premium_cell").innerText = "";
                         document.getElementById("cost_extreme_cell").innerText = "";
+
+                        document.getElementById("dest_cost_standard_cell").innerText = "";
+                        document.getElementById("dest_cost_premium_cell").innerText = "";
+                        document.getElementById("dest_cost_extreme_cell").innerText = "";
                     } else {
                         document.getElementById("tputinput").style.borderColor = "lightgray";
                         document.getElementById("tputwarning").classList.remove('text-danger');
@@ -238,6 +284,10 @@
                             document.getElementById("size_standard_cell").innerText = "";
                             document.getElementById("size_premium_cell").innerText = "";
                             document.getElementById("size_extreme_cell").innerText = "";
+
+                            document.getElementById("dest_size_standard_cell").innerText = "";
+                            document.getElementById("dest_size_premium_cell").innerText = "";
+                            document.getElementById("dest_size_extreme_cell").innerText = "";
 
                             document.getElementById("tput_swstandard_cell").innerText = "";
                             document.getElementById("tput_swstandardredundant_cell").innerText = "";
@@ -256,6 +306,11 @@
                             document.getElementById("cost_standard_cell").innerText = "";
                             document.getElementById("cost_premium_cell").innerText = "";
                             document.getElementById("cost_extreme_cell").innerText = "";
+
+                            document.getElementById("dest_cost_standard_cell").innerText = "";
+                            document.getElementById("dest_cost_premium_cell").innerText = "";
+                            document.getElementById("dest_cost_extreme_cell").innerText = "";
+
                     } else {
                         document.getElementById("iopsinput").style.borderColor = "lightgray";
                         document.getElementById("iopswarning").classList.remove('text-danger');
@@ -296,6 +351,10 @@
                             document.getElementById("size_standard_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             document.getElementById("size_premium_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             document.getElementById("size_extreme_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                            document.getElementById("dest_size_standard_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                            document.getElementById("dest_size_premium_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                            document.getElementById("dest_size_extreme_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                        
                         } else {
                             document.getElementById("sw_table_unit").innerHTML = "Volume Size <small>(TiB)</small>";
                             document.getElementById("table_unit").innerHTML = "Volume Size <small>(TiB)</small>";
@@ -304,6 +363,10 @@
                             document.getElementById("size_standard_cell").innerText = (volume_in_gb / 1024).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             document.getElementById("size_premium_cell").innerText = (volume_in_gb / 1024).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             document.getElementById("size_extreme_cell").innerText = (volume_in_gb / 1024).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                            document.getElementById("dest_size_standard_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                            document.getElementById("dest_size_premium_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                            document.getElementById("dest_size_extreme_cell").innerText = volume_in_gb.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                        
                         }
                         document.getElementById("tput_swstandard_cell").innerText = swstandard_tput.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                         document.getElementById("tput_swstandardredundant_cell").innerText = swstandard_tput.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -322,6 +385,9 @@
                         document.getElementById("cost_standard_cell").innerText = standard_cost;
                         document.getElementById("cost_premium_cell").innerText = premium_cost;
                         document.getElementById("cost_extreme_cell").innerText = extreme_cost;
+                        document.getElementById("dest_cost_standard_cell").innerText = standard_cost;
+                        document.getElementById("dest_cost_premium_cell").innerText = premium_cost;
+                        document.getElementById("dest_cost_extreme_cell").innerText = extreme_cost;
                         
                         swstandard_size_needed = (tput_target / swstandard_tputpertib) * 1024;
                         standard_size_needed = (tput_target / standard_tputpertib) * 1024;
@@ -402,6 +468,8 @@
                             document.getElementById("tput_standard_cell").innerText = "n/a";
                             document.getElementById("iops_standard_cell").innerText = "n/a";
                             document.getElementById("cost_standard_cell").innerText = "n/a";
+                            document.getElementById("dest_size_standard_cell").innerText = "n/a";
+                            document.getElementById("dest_cost_standard_cell").innerText = "n/a";
                         } else if (standard_size_needed <= min_vol_capacity) {
                             document.getElementById("size_standard_cell").innerText = mincap_as_displayed.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             document.getElementById("tput_standard_cell").innerText = ((min_vol_capacity / 1024) * standard_tputpertib).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -581,6 +649,7 @@
                     </div>
                 </div>
                 <div id="tableout">
+                    <small class="text-primary">Blue text indicates volume is sized for throughput.</small>
                     <table class='table-bordered table table-sm table-hover'>
                         <thead class='thead-light'>
                             <tr>
@@ -604,7 +673,8 @@
                             <td id="size_swstandard_cell"></td>
                             <td id="size_swstandardredundant_cell"></td>
                         </tr>
-                        <tr style="background-color: #e9ecef;">
+                        <tr style="border-style: solid; border-color: #007bff;">
+
                             <td>Volume Cost <small>(USD/month)</small></td>
                             <td id="cost_swstandard_cell"></td>
                             <td id="cost_swstandardredundant_cell"></td>
@@ -637,7 +707,8 @@
                             <td id="size_premium_cell"></td>
                             <td id="size_extreme_cell"></td>
                         </tr>
-                        <tr style="background-color: #e9ecef;">
+                        <tr style="border-style: solid; border-color: #007bff;">
+
                             <td>Volume Cost <small>(USD/month)</small></td>
                             <td id="cost_standard_cell"></td>
                             <td id="cost_premium_cell"></td>
@@ -645,9 +716,72 @@
                         </tr>
                     </table>
                     
+                    <small id="crrwarning" class="form-text text-muted">Specify percent daily change rate (1 - 100) to calculate replication costs.</small>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="my-1 input-group-text">Change Rate</span>
+                    </div>
+                    <input oninput="getResults()" type="text" class="my-1 mr-sm-1 form-control" placeholder="" value="0" aria-label="Change Rate" aria-describedby="Change Rate" id="changerate"></input>
+                    <div class="input-group-append btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-primary my-1">
+                            <input onclick="getResults()" name="ratefreq" type="radio" value="daily" id="" checked>% Daily</input>
+                        </label>
                     
+                    </div>
+                </div>
 
-
+                <table class='table-bordered table table-sm table-hover' id='replicationcost'>
+                    <thead class='thead-light'>
+                        <tr>
+                            <th class="align-top">Replication Frequency</th>
+                            <th>10 minutes<br><small class="text-muted">(0.17USD/GiB per month)</small></th>
+                            <th>hourly<br><small class="text-muted">(0.15USD/GiB per month)</small></th>
+                            <th>daily+<br><small class="text-muted">(0.14USD/GiB per month)</small></th>
+                        </tr>
+                    </thead>
+                        <tr>
+                            <td>Initial Transfer Cost <small>(USD)</small></td>
+                            <td id="init_10min_cell"></td>
+                            <td id="init_hourly_cell"></td>
+                            <td id="init_daily_cell"></td>
+                        </tr>
+                        <tr style="background-color: #e9ecef;">
+                            <td>Subsequent Months <small>(USD/month)</small></td>
+                            <td id="inc_10min_cell"></td>
+                            <td id="inc_hourly_cell"></td>
+                            <td id="inc_daily_cell"></td>
+                        </tr>
+                        <tr style="border-style: solid; border-color: #007bff;">
+                            <td>Replication Cost First Month <small>(USD/month)</small></td>
+                            <td id="month1_10min_cell"></td>
+                            <td id="month1_hourly_cell"></td>
+                            <td id="month1_daily_cell"></td>
+                        </tr>
+                  
+                    
+                </table>
+                <table class='table-bordered table table-sm table-hover' id="destinationvolume">
+                    <thead class='thead-light'>
+                        <tr>
+                            <th class="align-top">Destination Volume</th>
+                            <th>Standard<br><small class="text-muted">(16MiB/s per TiB)</small></th>
+                            <th>Premium<br><small class="text-muted">(64MiB/s per TiB)</small></th>
+                            <th>Extreme<br><small class="text-muted">(128MiB/s per TiB)</small></th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td id="table_unit">Volume Size <small>(GiB)</small></td>
+                        <td id="dest_size_standard_cell"></td>
+                        <td id="dest_size_premium_cell"></td>
+                        <td id="dest_size_extreme_cell"></td>
+                    </tr>
+                    <tr style="border-style: solid; border-color: #007bff;">
+                        <td>Volume Cost <small>(USD/month)</small></td>
+                        <td id="dest_cost_standard_cell"></td>
+                        <td id="dest_cost_premium_cell"></td>
+                        <td id="dest_cost_extreme_cell"></td>
+                    </tr>
+                </table>
                     <div class="input-group mb-3">
 
      
@@ -662,15 +796,16 @@
                             
                         </div>
                     </div>
-                    <small class="text-primary">Blue text indicates volume is sized for throughput.</small></br>
+                    
                     <!--<small class="text-success">Green cell indicates least expensive tier for the specified requirements.</small></br>-->
-                    <small>Monthly costs are based on a 730 hour billing month.</small></br>
+                    
                 </div>
             </div>
             <div class="card-footer">
                 <small class="text-muted">source: <a href="https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types">Service Levels</a>, <a href="https://cloud.google.com/architecture/partners/netapp-cloud-volumes/costs">Pricing</a>, <a href="https://cloud.netapp.com/blog/introduction-to-cloud-volumes-service-for-gcp">Performance</a>
                 </small><br>
                 <small class="text-muted">notes: calculator is for estimation purposes only</small>
+                <small>Monthly costs are based on a 730 hour billing month.</small></br>
             </div>
         </div>
         
