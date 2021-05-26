@@ -36,6 +36,7 @@
             premium_tputpertib = 64;
             extreme_tputpertib = 128;
             swstandard_tputpertib = 32;
+            swstandard_maxtput = 100;
             min_vol_capacity = 1024;
             max_vol_capacity = 102400;
             min_tput = 16.0;
@@ -322,8 +323,8 @@
 
                         if (tput_target <= min_tput) {
                             swstandard_tput = (volume_in_gb / 1024) * 32;
-                            if (swstandard_tput > max_tput) {
-                                swstandard_tput = max_tput;
+                            if (swstandard_tput > swstandard_maxtput) {
+                                swstandard_tput = swstandard_maxtput;
                             }
                             standard_tput = (volume_in_gb / 1024) * 16;
                             if (standard_tput > max_tput) {
@@ -450,7 +451,7 @@
                             document.getElementById("size_swstandardredundant_cell").classList.add('text-primary');
                             document.getElementById("capinput").classList.add('text-primary');
                             }
-                            if ((swstandard_size_needed / 1024) * swstandard_tputpertib <= max_tput) {
+                            if ((swstandard_size_needed / 1024) * swstandard_tputpertib <= swstandard_max_tput) {
                                 document.getElementById("tput_swstandard_cell").innerText = ((swstandard_size_needed / 1024) * swstandard_tputpertib).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                                 document.getElementById("tput_swstandardredundant_cell").innerText = ((swstandard_size_needed / 1024) * swstandard_tputpertib).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                                 document.getElementById("iops_swstandard_cell").innerText = (((swstandard_size_needed / 1024) * swstandard_tputpertib) * 1024 / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
