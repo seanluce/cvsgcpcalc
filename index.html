@@ -39,6 +39,7 @@
             min_vol_capacity = 1024;
             max_vol_capacity = 102400;
             min_tput = 16.0;
+            swmax_tput = 100.0;
             discount_percent = 0;
             tenmin_rate = 0.17;
             hourly_rate = 0.15;
@@ -319,7 +320,6 @@
                         if (tput_target == 0 && iops_target > 0) {
                             tput_target = (iops_target * iosize) / 1024;
                         }
-
                         if (tput_target <= min_tput) {
                             swstandard_tput = (volume_in_gb / 1024) * 32;
                             if (swstandard_tput > max_tput) {
@@ -391,7 +391,19 @@
                         document.getElementById("dest_cost_premium_cell").innerText = premium_cost;
                         document.getElementById("dest_cost_extreme_cell").innerText = extreme_cost;
                         
-                        swstandard_size_needed = (tput_target / swstandard_tputpertib) * 1024;
+                        if (tput_target > swmax_tput) {
+                            swstandard_size_needed = (swmax_tput / swstandard_tputpertib) * 1024;
+                            document.getElementById("tput_swstandard_cell").classList.add('text-danger');
+                            document.getElementById("tput_swstandardredundant_cell").classList.add('text-danger');
+                            document.getElementById("maxswthroughput").classList.remove('text-muted');
+                            document.getElementById("maxswthroughput").classList.add('text-danger');
+                        } else {
+                            swstandard_size_needed = (tput_target / swstandard_tputpertib) * 1024;
+                            document.getElementById("tput_swstandard_cell").classList.remove('text-danger');
+                            document.getElementById("tput_swstandardredundant_cell").classList.remove('text-danger');
+                            document.getElementById("maxswthroughput").classList.remove('text-danger');
+                            document.getElementById("maxswthroughput").classList.add('text-muted');
+                        }
                         standard_size_needed = (tput_target / standard_tputpertib) * 1024;
                         premium_size_needed = (tput_target / premium_tputpertib) * 1024;
                         extreme_size_needed = (tput_target / extreme_tputpertib) * 1024;
@@ -666,6 +678,7 @@
 
                 <div id="tableout">
                     <small class="text-primary">Blue text indicates volume is sized for throughput.</small>
+                    <small id="maxswthroughput" class="text-muted">Maximum throughput for Standard-SW is 100 MiB/s.</small>
                     <table class='table-bordered table table-sm table-hover'>
                         <thead class='thead-light'>
                             <tr>
