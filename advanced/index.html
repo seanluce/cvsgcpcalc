@@ -462,16 +462,16 @@
                             document.getElementById("size_swstandardredundant_cell").classList.add('text-primary');
                             document.getElementById("capinput").classList.add('text-primary');
                             }
-                            if ((swstandard_size_needed / 1024) * swstandard_tputpertib <= max_tput) {
+                            if ((swstandard_size_needed / 1024) * swstandard_tputpertib <= swmax_tput) {
                                 document.getElementById("tput_swstandard_cell").innerText = ((swstandard_size_needed / 1024) * swstandard_tputpertib).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                                 document.getElementById("tput_swstandardredundant_cell").innerText = ((swstandard_size_needed / 1024) * swstandard_tputpertib).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                                 document.getElementById("iops_swstandard_cell").innerText = (((swstandard_size_needed / 1024) * swstandard_tputpertib) * 1024 / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                                 document.getElementById("iops_swstandardredundant_cell").innerText = (((swstandard_size_needed / 1024) * swstandard_tputpertib) * 1024 / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             } else {
-                                document.getElementById("tput_swstandard_cell").innerText = max_tput.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-                                document.getElementById("tput_swstandardredundant_cell").innerText = max_tput.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-                                document.getElementById("iops_swstandard_cell").innerText = ((max_tput * 1024) / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-                                document.getElementById("iops_swstandardredundant_cell").innerText = ((max_tput * 1024) / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                document.getElementById("tput_swstandard_cell").innerText = swmax_tput.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                document.getElementById("tput_swstandardredundant_cell").innerText = swmax_tput.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                document.getElementById("iops_swstandard_cell").innerText = ((swmax_tput * 1024) / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                document.getElementById("iops_swstandardredundant_cell").innerText = ((swmax_tput * 1024) / iosize).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             }
                             document.getElementById("cost_swstandard_cell").innerText = (swstandard_size_needed * swstandard_rate).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                             document.getElementById("cost_swstandardredundant_cell").innerText = (swstandard_size_needed * swstandardredundant_rate).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
