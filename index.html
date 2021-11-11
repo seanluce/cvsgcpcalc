@@ -35,11 +35,11 @@
             standard_tputpertib = 16;
             premium_tputpertib = 64;
             extreme_tputpertib = 128;
-            swstandard_tputpertib = 32;
+            swstandard_tputpertib = 128;
             min_vol_capacity = 1024;
             max_vol_capacity = 102400;
             min_tput = 16.0;
-            swmax_tput = 100.0;
+            swmax_tput = 640.0;
             discount_percent = 0;
             tenmin_rate = 0.17;
             hourly_rate = 0.15;
@@ -321,7 +321,7 @@
                             tput_target = (iops_target * iosize) / 1024;
                         }
                         if (tput_target <= min_tput) {
-                            swstandard_tput = (volume_in_gb / 1024) * 32;
+                            swstandard_tput = (volume_in_gb / 1024) * 128;
                             if (swstandard_tput > max_tput) {
                                 swstandard_tput = max_tput;
                             }
@@ -678,13 +678,13 @@
 
                 <div id="tableout">
                     <small class="text-primary">Blue text indicates volume is sized for throughput.</small>
-                    <small id="maxswthroughput" class="text-muted">Maximum throughput for Standard-SW is 100 MiB/s.</small>
+                    <small id="maxswthroughput" class="text-muted">Maximum throughput for Standard-SW is 640 MiB/s.</small>
                     <table class='table-bordered table table-sm table-hover'>
                         <thead class='thead-light'>
                             <tr>
                                 <th class="align-top">Standard-SW</th>
-                                <th>Standard<br><small class="text-muted">(32MiB/s per TiB)</small></th>
-                                <th>Zone Redundant<br><small class="text-muted">(32MiB/s per TiB)</small></th>
+                                <th>Standard<br><small class="text-muted">(128MiB/s per TiB)</small></th>
+                                <th>Zone Redundant<br><small class="text-muted">(128MiB/s per TiB)</small></th>
                             </tr>
                         </thead>
                         <tr>
