@@ -594,7 +594,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="h5"><img src="cvsicon.svg" class="float-left" height="40"></div>
-                <div class="align-center"><span class="h6">&nbsp&nbspCVS for GCP Performance Calculator <small>(<a href="https://seanluce.github.io/cvsgcpcalc/">basic</a>)</small></span></div> 
+                <div class="align-center"><span class="h6">&nbsp&nbspCVS for GCP Performance Calculator <small>(<a href="https://seanluce.github.io/cvsgcpcalc/advanced/">advanced</a>)</small></span></div> 
             </div>
             <div class="card-body">
                 <small id="volumewarning" class="form-text text-muted">Minimum volume size is 1024GiB. Maximum volume size is 100TiB.</small>
@@ -624,8 +624,16 @@
                         </label>
                     </div>
                 </div>
-                <small class="" id="iopswarning" class="form-text text-muted">Enter 0 to size for capacity only. Maximum throughput is <span id="maxiopsnote"></span> IOPS.</small>
-                <div class="input-group mb-3">
+
+                <div class="clearfix no-gutter d-none">
+                    <div style="padding: 0;" id="readtext" class="float-left no-gutter"></div>
+                    <div style="padding: 0;" id="writetext" class="float-right no-gutter"></div>
+                    <div style="padding: 5px 10px 10px 10px; border: 1px; border-color: black">    
+                        <input style="width: 100%; padding: 20px;" data-slider-id="myslider" id="ms" type="text" data-slider-ticks="[0,10,20,30,40,50,60,70,80,90,100]" data-slider-reversed="true" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100"/>
+                    </div> 
+                </div>
+                <small class="d-none" id="iopswarning" class="form-text text-muted">Enter 0 to size for capacity only. Maximum throughput is <span id="maxiopsnote"></span> IOPS.</small>
+                <div class="input-group mb-3 d-none">
                     <div class="input-group-prepend">
                         <span class="my-1 input-group-text">IOPS</span>
                     </div>
@@ -654,16 +662,19 @@
                     </div>
                 </div>
 
-                <div class="clearfix no-gutter">
-                    <div style="padding: 0;" id="readtext" class="float-left no-gutter"></div>
-                    <div style="padding: 0;" id="writetext" class="float-right no-gutter"></div>
-                    <div style="padding: 5px 10px 10px 10px; border: 1px; border-color: black">    
-                        <input style="width: 100%; padding: 20px;" data-slider-id="myslider" id="ms" type="text" data-slider-ticks="[0,10,20,30,40,50,60,70,80,90,100]" data-slider-reversed="true" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100"/>
-                    </div> 
+                <small id="crrwarning" class="form-text text-muted">Specify percent daily change rate (1 - 100) to calculate replication costs.</small>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="my-1 input-group-text">Change Rate</span>
+                    </div>
+                    <input oninput="getResults()" type="text" class="my-1 mr-sm-1 form-control" placeholder="" value="0" aria-label="Change Rate" aria-describedby="Change Rate" id="changerate"></input>
+                    <div class="input-group-append btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-primary my-1">
+                            <input onclick="getResults()" name="ratefreq" type="radio" value="daily" id="" checked>% Daily</input>
+                        </label>
+                    
+                    </div>
                 </div>
-                
-
-                
 
                 <div id="tableout">
                     <small class="text-primary">Blue text indicates volume is sized for throughput.</small>
@@ -681,7 +692,7 @@
                             <td id="tput_swstandard_cell"></td>
                             <td id="tput_swstandardredundant_cell"></td>
                         </tr>
-                        <tr class="" style="background-color: #e9ecef;">
+                        <tr class="d-none" style="background-color: #e9ecef;">
                             <td id="swiosizecell">IOPS <small>(64k Sequential)</small></td>
                             <td id="iops_swstandard_cell"></td>
                             <td id="iops_swstandardredundant_cell"></td>
@@ -713,7 +724,7 @@
                             <td id="tput_premium_cell"></td>
                             <td id="tput_extreme_cell"></td>
                         </tr>
-                        <tr class="" style="background-color: #e9ecef;">
+                        <tr class="d-none" style="background-color: #e9ecef;">
                             <td id="iosizecell">IOPS <small>(64k Sequential)</small></td>
                             <td id="iops_standard_cell"></td>
                             <td id="iops_premium_cell"></td>
@@ -788,25 +799,9 @@
                         <td id="dest_cost_extreme_cell"></td>
                     </tr>
                 </table>
-                <small id="crrwarning" class="form-text text-muted">Specify percent daily change rate (1 - 100) to calculate replication costs.</small>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="my-1 input-group-text">Change Rate</span>
-                    </div>
-                    <input oninput="getResults()" type="text" class="my-1 mr-sm-1 form-control" placeholder="" value="0" aria-label="Change Rate" aria-describedby="Change Rate" id="changerate"></input>
-                    <div class="input-group-append btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-outline-primary my-1">
-                            <input onclick="getResults()" name="ratefreq" type="radio" value="daily" id="" checked>% Daily</input>
-                        </label>
-                    
-                    </div>
-                </div>
-
-
-
                     <div class="input-group mb-3">
 
-    
+     
                         <div class="input-group-prepend">
                             <span style="background-color: #0f9d58; color: white;" class="my-1 input-group-text">Discount</span>
                         </div>
@@ -826,7 +821,7 @@
             <div class="card-footer">
                 <small class="text-muted">monthly costs are based on a 730 hour billing month</small>
                 <br><small class="text-muted">calculator is for estimation purposes only</small><br>
-                <small class="text-muted">source: <a href="https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types"  target="_blank">Service Levels</a>, <a href="https://cloud.google.com/architecture/partners/netapp-cloud-volumes/costs" target="_blank">Pricing</a>, <a href="https://cloud.netapp.com/blog/introduction-to-cloud-volumes-service-for-gcp" target="_blank">Performance</a>
+                <small class="text-muted">source: <a href="https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types" target="_blank">Service Levels</a>, <a href="https://cloud.google.com/architecture/partners/netapp-cloud-volumes/costs" target="_blank">Pricing</a>, <a href="https://cloud.netapp.com/blog/introduction-to-cloud-volumes-service-for-gcp" target="_blank">Performance</a>
                 </small><br>
                 
                 

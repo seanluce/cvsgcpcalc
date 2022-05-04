@@ -1,0 +1,15 @@
+.btn-outline-primary:not(:disabled):not(.disabled).active {
+    background-color: #4285F4;
+    border-color: #4285F4;
+}
+
+.slider-selection.tick-slider-selection {
+    background-image: none;
+    background-color: #F4B400;
+}
+
+.slider-handle,
+.slider-tick.in-selection {
+    background-image: none;
+    background-color: #F4B400;
+}
